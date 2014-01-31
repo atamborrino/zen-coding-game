@@ -40,7 +40,7 @@ case class RendererActor(failures:ActorRef) extends Actor with ActorLogging {
   override def preRestart(reason: Throwable, message: Option[Any]) {
     super.preRestart(reason, message)
     message.collect {
-      case message@Paste(_, content, _, _) => failures ! AddFailure(reason, message, sender, content)
+      case message@Paste(_, content, _, _, _) => failures ! AddFailure(reason, message, sender, content)
     }
   }
 
@@ -50,13 +50,14 @@ case class RendererActor(failures:ActorRef) extends Actor with ActorLogging {
   }
 
   def receive = LoggingReceive {
-    killer { case paste@Paste(_, Some(content), _, _) => {
+    killer { case paste@Paste(_, Some(content), Some(tests), _, _) => {
       sbt map { sbt =>
         def sendPasteFile(result: String) {
           sender !
-              paste.copy(content = sbtDir.pasteFile.read, output = Option(result))
+              paste.copy(content = sbtDir.pasteFile.read, tests = sbtDir.baseTestFile.read, output = Option(result))
         }
         sbtDir.pasteFile.write(Option(content))
+        sbtDir.baseTestFile.write(Option(tests), false)
         val reloadResult = sbt.resultAsString(sbt.process("reload"))
         sendPasteFile(reloadResult)
         sbtDir.sxrSource.delete()

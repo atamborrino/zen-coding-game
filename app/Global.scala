@@ -7,6 +7,7 @@ object Global extends GlobalSettings {
     Logger.info("Application has started")
     TemplatePastes.templates.foreach { case (label, paste) =>
       controllers.Pastes.container.paste(paste.id).pasteFile.write(paste.content)
+      controllers.Pastes.container.paste(paste.id).baseTestFile.write(paste.tests)
     }
   }
 

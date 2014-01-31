@@ -57,7 +57,7 @@ object Pastes extends Controller {
           .flashing("error" -> form.errors.map(_.message).mkString, "paste" -> paste)
     } else {
       Async {
-        (renderer ? AddPaste(paste, uid)).mapTo[Paste].map { paste =>
+        (renderer ? AddPaste(paste, uid, container.paste(form("id").value.get.toLong).baseTestFile.read)).mapTo[Paste].map { paste =>
           Redirect(routes.Pastes.show(paste.id))
         }
       }
@@ -65,7 +65,7 @@ object Pastes extends Controller {
   }
 
   def edit = Action { implicit request =>
-    val form = pasteForm.bindFromRequest().get
+    val form = paseForm.bindFromRequest().get
     val pasteById = form.id.map(id => container.paste(id).pasteFile.read.getOrElse(""))
     Redirect(routes.Application.index()).flashing("paste" -> pasteById.getOrElse(form.paste))
   }

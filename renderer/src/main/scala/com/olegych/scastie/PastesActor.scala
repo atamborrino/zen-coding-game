@@ -17,12 +17,12 @@ case class PastesActor(pastesContainer: PastesContainer, progressActor: ActorRef
   private val renderer = createRenderer(context, failures)
 
   def receive = LoggingReceive {
-    case AddPaste(content, uid) =>
+    case AddPaste(content, uid, tests) =>
       val id = nextPasteId
-      val paste = Paste(id = id, content = Option(content), output = Option("Processing..."), uid = Some(uid))
+      val paste = Paste(id = id, content = Option(content), tests = tests, output = Option("Processing..."), uid = Some(uid))
       renderer ! paste
       sender ! paste
-      writePaste(paste)
+      writePaste(paste, tests)
     case GetPaste(id)           =>
       sender ! readPaste(id)
     case DeletePaste(id, uid)   =>
@@ -31,21 +31,21 @@ case class PastesActor(pastesContainer: PastesContainer, progressActor: ActorRef
       writePaste(paste)
   }
 
-  def writePaste(paste: Paste) {
+  def writePaste(paste: Paste, tests: Option[String] = None) {
     val pasteDir = pastesContainer.paste(paste.id)
     val contentChanged = readPaste(paste.id).content != paste.content
     pasteDir.pasteFile.write(paste.content)
     pasteDir.uidFile.write(paste.uid)
+    pasteDir.baseTestFile.write(tests, false)
     progressActor ! PasteProgress(paste.id, contentChanged, paste.output.getOrElse(""))
     pasteDir.outputFile.write(paste.output, truncate = false)
   }
-
   def readPaste(id: Long) = {
     val paste = pastesContainer.paste(id)
     if (paste.pasteFile.exists) {
-      Paste(id = id, content = paste.pasteFile.read, output = paste.outputFile.read, uid = paste.uidFile.read)
+      Paste(id = id, content = paste.pasteFile.read, tests = paste.baseTestFile.read, output = paste.outputFile.read, uid = paste.uidFile.read)
     } else {
-      Paste(id = id, content = None, output = Option("Not found"), uid = None)
+      Paste(id = id, content = None, tests = None, output = Option("Not found"), uid = None)
     }
   }
 
@@ -70,13 +70,13 @@ object PastesActor {
 
   sealed trait PasteMessage
 
-  case class AddPaste(content: String, uid: String) extends PasteMessage
+  case class AddPaste(content: String, uid: String, test: Option[String]) extends PasteMessage
 
   case class GetPaste(id: Long) extends PasteMessage
 
   case class DeletePaste(id: Long, uid: String) extends PasteMessage
 
-  case class Paste(id: Long, content: Option[String], output: Option[String], uid: Option[String])
+  case class Paste(id: Long, content: Option[String], tests: Option[String], output: Option[String], uid: Option[String])
       extends PasteMessage
 
   case class PasteProgress(id: Long, contentChanged: Boolean, output: String)
