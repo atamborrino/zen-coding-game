@@ -15,6 +15,7 @@ object ApplicationBuild extends Build {
       runner in(Compile, run) <<= (taskTemporaryDirectory, scalaInstance) map { (nativeTmp, instance) =>
         new SecuredRun(instance, false, nativeTmp)
       },
+      libraryDependencies += "org.scalatest" %% "scalatest" % "2.0",
       onLoad in Global := addDepsToState
     ))
 
