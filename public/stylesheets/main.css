@@ -951,7 +951,7 @@ aside a[href^="http"]:after, .doc a[href^="http"]:after {
 #editor {
   position: absolute;
   width: 650px;
-  height: 700px;
+  height: 500px;
   top: 0px;
   right: 100px;
   left: 0;
@@ -960,12 +960,12 @@ aside a[href^="http"]:after, .doc a[href^="http"]:after {
 
 .submit-paste {
   position: absolute;
-  top: 700px;
-  left: 0;  
+  top: 500px;
+  left: 0;
 }
 
 .templates-form {
   position: absolute;
-  top: 750px;
-  left: 0;  
+  top: 550px;
+  left: 0;
 }
