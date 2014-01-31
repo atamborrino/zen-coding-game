@@ -13,3 +13,15 @@ hs_err_pid*
 java.exe.stackdump
 openshift_data
 RUNNING_PID
+
+# temp files
+.~*
+*~
+*.orig
+
+# eclipse
+.scala_dependencies
+.buildpath
+.cache
+.target
+bin/
