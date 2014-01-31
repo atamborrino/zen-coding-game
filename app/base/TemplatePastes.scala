@@ -13,6 +13,27 @@ object TemplatePastes {
 
   val templates = {
     List(
+(
+        "Âge du capitaine"
+          ,nextPaste( """
+// Puisque tu fais de la géométrie et de la trigonométrie, je vais te donner un problème :
+// Un navire est en mer, il est parti de Boston chargé de coton, il jauge 200 tonneaux,
+// il fait voile vers Le Havre, le grand mât est cassé, il y a un mousse sur le gaillard d'avant,
+// les passagers sont au nombre de douze, le vent souffle NNE,
+// l'horloge marque trois heures un quart d'après-midi, on est au mois de mai... On demande l'âge du capitaine.
+object CaptainAge {
+  def age: Int = ???
+}
+"""
+          , """
+import org.scalatest._
+
+class TestSpec extends FlatSpec {
+  "age" should "return 32" in {
+    assert(CaptainAge.age === 32)
+  }
+"""
+)),
       (
         "Palindrome"
           ,nextPaste( """
