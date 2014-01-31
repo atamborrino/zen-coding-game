@@ -63,4 +63,5 @@ object ApplicationBuild extends Build {
         Nil
     }
   }
+
 }

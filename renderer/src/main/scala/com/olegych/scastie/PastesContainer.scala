@@ -14,6 +14,9 @@ case class PastesContainer(root: java.io.File) {
   def paste(id: Long) = child("paste%20d".format(id).replaceAll(" ", "0"))
   private def child(id: String) = copy(root = new File(root, id))
   def pasteFile = new ExtendedFile("src/main/scala/test.scala")
+
+  def baseTestFile = new ExtendedFile("src/main/scala/basetest.scala")
+
   def outputFile = new ExtendedFile("src/main/scala/output.txt")
   def uidFile = new ExtendedFile("src/main/scala/uid.txt")
   def sxrSource = new ExtendedFile("target/classes.sxr/src/main/scala/test.scala.html")
