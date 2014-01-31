@@ -25,3 +25,5 @@ RUNNING_PID
 .cache
 .target
 bin/
+.classpath
+.project
