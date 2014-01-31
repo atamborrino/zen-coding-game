@@ -70,7 +70,8 @@ object Pastes extends Controller {
   def edit = Action { implicit request =>
     val form = pasteForm.bindFromRequest().get
     val pasteById = form.id.map(id => container.paste(id).pasteFile.read.getOrElse(""))
-    Redirect(routes.Application.index()).flashing("paste" -> pasteById.getOrElse(form.paste))
+    Redirect(routes.Application.index()).flashing("paste" -> pasteById.getOrElse(form.paste),
+      "id" -> form.id.get.toString)
   }
 
   def delete(id: Long) = Action { implicit request =>
