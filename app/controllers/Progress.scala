@@ -29,6 +29,7 @@ class Progress extends Actor with ActorLogging {
       monitors.removeBinding(monitorChannel.id, monitorChannel)
     case pasteProgress: PasteProgress =>
       implicit val format = Json.format[PasteProgress]
+      println("push here : " + Json.toJson(pasteProgress))
       monitors.get(pasteProgress.id).toList.flatten.map(_.channel.push(Json.toJson(pasteProgress)))
   }
 }

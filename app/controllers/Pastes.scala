@@ -54,11 +54,11 @@ object Pastes extends Controller {
     val paste = form("paste").value.get
     if (form.hasErrors) {
       Redirect(routes.Application.index())
-          .flashing("error" -> form.errors.map(_.message).mkString, "paste" -> paste)
+        .flashing("error" -> form.errors.map(_.message).mkString, "paste" -> paste)
     } else {
       Async {
         (renderer ? AddPaste(paste, uid)).mapTo[Paste].map { paste =>
-          Redirect(routes.Pastes.show(paste.id))
+          Ok(paste.id.toString)
         }
       }
     }
@@ -79,6 +79,17 @@ object Pastes extends Controller {
       }
     }
   }
+
+  // def prepareWebsocket(id: Long) = {
+  //   (renderer ? GetPaste(id)).mapTo[Paste].map { paste =>
+  //     val content = paste.content.getOrElse("")
+  //     val output = request.flash.get("error").map(_ + "\n").getOrElse("") + paste.output.getOrElse("")
+  //     val typedContent = if (content.matches("(?mis)\\s*<pre>.*")) Left(Html(content)) else Right(content)
+  //     val ref = """\[(?:error|warn)\].*test.scala:(\d+)""".r
+  //     val highlights = ref.findAllIn(output).matchData.map(_.group(1).toInt).toSeq
+  //     (typedContent, output, highlights, id)
+  //   }
+  // }
 
   def show(id: Long) = Action { implicit request =>
     Async {
