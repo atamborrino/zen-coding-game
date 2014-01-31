@@ -8,4 +8,3 @@ object Build extends Build {
   )
 }
 
->>>>>>> hacked for tests

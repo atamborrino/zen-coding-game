@@ -57,8 +57,11 @@ object Pastes extends Controller {
         .flashing("error" -> form.errors.map(_.message).mkString, "paste" -> paste)
     } else {
       Async {
-        (renderer ? AddPaste(paste, uid)).mapTo[Paste].map { paste =>
-          Ok(paste.id.toString)
+        // (renderer ? AddPaste(paste, uid)).mapTo[Paste].map { paste =>
+        //   Ok(paste.id.toString)
+
+        (renderer ? AddPaste(paste, uid, container.paste(form("id").value.get.toLong).baseTestFile.read)).mapTo[Paste].map { paste =>
+          Redirect(routes.Pastes.show(paste.id))
         }
       }
     }
