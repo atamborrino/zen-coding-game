@@ -68,11 +68,40 @@ case class Sbt(dir: File, log: LoggingAdapter, clearOnExit: Boolean, uniqueId: S
     }
   }
 
+  def getPercentageTest(output: Seq[String]): Option[Int] = {
+
+    val nTestsMatcher = "[info] Total number of tests run: "
+    val nSuccedeedMatcher = "[info] Tests: succeeded "
+
+    var maybeNumberTests: Option[Int] = None
+    var maybeNumberSuccedeed: Option[Int] = None
+
+    output foreach { line =>
+      if (line.startsWith(nTestsMatcher)) {
+	maybeNumberTests = Some(line.split(" ").last.toInt)
+      } else if (line.startsWith(nSuccedeedMatcher)) {
+	maybeNumberSuccedeed = Some(line.split(",").head.split(" ").last.toInt)
+      }
+    }
+
+    for {
+      numberTests <- maybeNumberTests
+      numberSuccedeed <- maybeNumberSuccedeed
+    } yield {
+      numberSuccedeed * 100 / numberTests
+    }
+
+  }
+
   object Success {
     val SuccessParser = """(?s)\[success\].*""".r
-    def unapply(result: Seq[String]): Option[String] = result.lastOption match {
-      case Some(SuccessParser()) => Option(resultAsString(result))
-      case _ => None
+    def unapply(result: Seq[String]): Option[String] = {
+      val maybePercentage = getPercentageTest(result)
+
+      result.lastOption match {
+	case Some(SuccessParser()) => Option(resultAsString(result))
+	case _ => None
+    }
     }
   }
 
