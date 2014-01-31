@@ -14,7 +14,7 @@ object TemplatePastes {
   val templates = {
     List(
 (
-        "Âge du capitaine"
+        "Age of the captain"
           ,nextPaste( """
 // Puisque tu fais de la géométrie et de la trigonométrie, je vais te donner un problème :
 // Un navire est en mer, il est parti de Boston chargé de coton, il jauge 200 tonneaux,
@@ -29,9 +29,14 @@ object CaptainAge {
 import org.scalatest._
 
 class TestSpec extends FlatSpec {
-  "age" should "return 32" in {
-    assert(CaptainAge.age === 32)
+  "Captain Age" should "be the Answer to The Ultimate Question of Life, the Universe, and Everything" in {
+    assert(CaptainAge.age === 42)
   }
+}
+
+object Main extends App {
+  (new TestSpec).execute(stats = true)
+}
 """
 )),
       (
