@@ -57,7 +57,7 @@ case class RendererActor(failures:ActorRef) extends Actor with ActorLogging {
               paste.copy(content = sbtDir.pasteFile.read, tests = sbtDir.baseTestFile.read, output = Option(result))
         }
         sbtDir.pasteFile.write(Option(content))
-        sbtDir.baseTestFile.write(Option(tests), false)
+        sbtDir.baseTestFile.write(Option(tests))
         val reloadResult = sbt.resultAsString(sbt.process("reload"))
         sendPasteFile(reloadResult)
         sbtDir.sxrSource.delete()
