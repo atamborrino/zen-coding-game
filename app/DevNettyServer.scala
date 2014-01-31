@@ -25,7 +25,7 @@ class NettyServer(mode: Mode.Value) {
 
   new play.core.server.NettyServer(
     new StaticApplication(new File(System.getProperty("user.dir")), mode),
-    Option(System.getProperty("http.port")).map(Integer.parseInt(_)).getOrElse(9000),
+    Option(System.getProperty("http.port")).map(Integer.parseInt(_)), //.getOrElse(9000),
     Option(System.getProperty("https.port")).map(Integer.parseInt(_)),
     Option(System.getProperty("http.address")).getOrElse("0.0.0.0")
     , mode
@@ -37,6 +37,7 @@ class StaticApplication(applicationPath: File, mode: Mode.Value) extends Applica
 
   Play.start(application)
 
-  def get = Right(application)
+  //def get = Right(application)
+  def get = scala.util.Try(application)
   def path = applicationPath
 }
