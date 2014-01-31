@@ -56,6 +56,11 @@ class TestSpec extends FlatSpec {
     assert(Palindrome.isPalindrome(List(1, 4, 7, 9, 10, 7, 4, 1)) === false)
   }
 }
+
+object Main extends App {
+  (new TestSpec).execute(stats = true)
+}
+
                                              """
 )),
       ("Greatest common divisor"
@@ -101,6 +106,11 @@ class TestSpec extends FlatSpec {
     assert(GCD.gcd(10, 1) === 1)
   }
 }
+
+object Main extends App {
+  (new TestSpec).execute(stats = true)
+}
+
 """ ) )
 ) }
 

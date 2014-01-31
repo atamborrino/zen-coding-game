@@ -36,7 +36,7 @@ case class PastesActor(pastesContainer: PastesContainer, progressActor: ActorRef
     val contentChanged = readPaste(paste.id).content != paste.content
     pasteDir.pasteFile.write(paste.content)
     pasteDir.uidFile.write(paste.uid)
-    pasteDir.baseTestFile.write(tests, false)
+    pasteDir.baseTestFile.write(tests)
     progressActor ! PasteProgress(paste.id, contentChanged, paste.output.getOrElse(""))
     pasteDir.outputFile.write(paste.output, truncate = false)
   }
